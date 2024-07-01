@@ -30,6 +30,7 @@ runs:
     - name: Build image using bake
       shell: bash
       run: |
+        ARCH_FOR_DOCKER="$(arch | sed -e 's#x86_64#amd64#' | sed -e 's#aarch64#arm64#')"
         bake --product ${{ inputs.product }} \
         --image-version "0.0.0-dev-${ARCH_FOR_DOCKER}" \
         --architecture "linux/${ARCH_FOR_DOCKER}" \
