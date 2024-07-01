@@ -15,6 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - id: foo
-        uses: .github/actions/build.yml
+        uses: .github/actions/build
         with:
           product: product1 # todo: how to handle workflow_dispatch (use product input)
