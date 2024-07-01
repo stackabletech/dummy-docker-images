@@ -1,0 +1,19 @@
+name: Build Product Image
+description: This action builds a product Docker image with a specific version
+inputs:
+  product:
+    description: The name of the product to build via bake (directory name)
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Setup Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    - name: Setup Python
+      shell: bash
+      run: | 
+        sudo apt update
+        sudo apt install -y python3
+    - name: Building ${{ inputs.product }}
+      shell: bash
+      run: echo ${{ inputs.product }}
