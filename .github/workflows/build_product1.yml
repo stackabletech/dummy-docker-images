@@ -2,9 +2,15 @@ name: Build Product1
 on:
   workflow_dispatch:
   push:
-    # todo: limit paths
     branches:
       - main
+    paths:
+      - product1/**
+      - .github/**
+  pull_request:
+    paths:
+      - product1/**
+      - .github/**
 
 jobs:
   build:
