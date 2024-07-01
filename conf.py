@@ -4,17 +4,17 @@ Configuration file for the Stackable image-tools: https://github.com/stackablete
 Application images will be created for products and associated versions configured here.
 """
 
-from product1 import versions as product1
-from product2 import versions as product2
+from product1 import versions as product1_versions
+from product2 import versions as product2_versions
 
 products = [
     {
         "name": "product1",
-        "versions": product1.versions,
+        "versions": product1_versions.versions,
     },
     {
         "name": "product2",
-        "versions": product2.versions,
+        "versions": product2_versions.versions,
     },
 ]
 
