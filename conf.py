@@ -4,19 +4,21 @@ Configuration file for the Stackable image-tools: https://github.com/stackablete
 Application images will be created for products and associated versions configured here.
 """
 
-from product1 import versions as product1_versions
-from product2 import versions as product2_versions
+import product1.versions as product1
+import product2.versions as product2
 
 products = [
     {
         "name": "product1",
-        "versions": product1_versions.versions,
+        "versions": product1.versions,
     },
     {
         "name": "product2",
-        "versions": product2_versions.versions,
+        "versions": product2.versions,
     },
 ]
+
+print(products)
 
 # open_shift_projects = {
 #     "airflow": {"id": "62613f498ccb9938ba3cfde6"},
