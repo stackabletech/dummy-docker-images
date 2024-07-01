@@ -1,7 +1,8 @@
-name: Build (and optionally publish) 0.0.0-dev images
+name: Build Product1
 on:
   workflow_dispatch:
   push:
+    # todo: limit paths
     branches:
       - main
 
@@ -13,3 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - id: foo
+        uses: ../actions/build.yml
+        with:
+          product: product1 # todo: how to handle workflow_dispatch (use product input)
