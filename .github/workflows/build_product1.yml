@@ -21,7 +21,9 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-      - id: foo
+      - name: Build Product Image
         uses: ./.github/actions/build
         with:
           product: product1 # todo: how to handle workflow_dispatch (use product input)
+      - name: Publish Product Image
+        uses: ./.github/actions/publish
