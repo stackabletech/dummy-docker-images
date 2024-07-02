@@ -15,8 +15,8 @@ on:
 jobs:
   build:
     name: hello
-    # permissions:
-    #   id-token: write
+    permissions:
+      id-token: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
