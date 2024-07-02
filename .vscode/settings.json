@@ -1,0 +1,5 @@
+{
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-action.json": "file:///home/techassi/src/misc/github.com/stackabletech/dummy-docker-images/.github/actions/build.yml"
+  }
+}
