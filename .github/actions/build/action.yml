@@ -6,13 +6,14 @@ inputs:
     required: true
   image-tools-version:
     description: The Stackable image-tools version
-    default: 0.0.5
+    default: 0.0.8
 runs:
   using: composite
   steps:
     - name: Setup Docker Buildx
       uses: docker/setup-buildx-action@v3
 
+      # NOTE (@Techassi): Why do we install python via apt and not the setup-python action?
     - name: Setup Python
       shell: bash
       run: | 
