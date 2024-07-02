@@ -4,6 +4,12 @@ inputs:
   product:
     description: The name of the product to publish
     required: true
+  nexus_password:
+    description: The password to login to Nexus
+    required: true
+  harbor_secret:
+    description: The secret to login to Harbor
+    required: true
 runs:
   using: composite
   steps:
@@ -15,14 +21,14 @@ runs:
       with:
         registry: docker.stackable.tech
         username: github
-        password: ${{ secrets.NEXUS_PASSWORD }}
+        password: ${{ inputs.nexus_password }}
 
     - name: Login to Stackable Harbor
       uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3.2.0
       with:
         registry: oci.stackable.tech
         username: robot$sdp+github-action-build
-        password: ${{ secrets.HARBOR_ROBOT_SDP_GITHUB_ACTION_BUILD_SECRET }}
+        password: ${{ inputs.harbor_secret }}
 
     - name: Setup environment variables
       shell: bash
