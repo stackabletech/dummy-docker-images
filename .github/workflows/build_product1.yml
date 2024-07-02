@@ -28,5 +28,6 @@ jobs:
       - name: Publish Product Image
         uses: ./.github/actions/publish
         with:
+          product: product1
           nexus_password: ${{ secrets.NEXUS_PASSWORD }}
           harbor_secret: ${{ secrets.HARBOR_ROBOT_SDP_GITHUB_ACTION_BUILD_SECRET }}
