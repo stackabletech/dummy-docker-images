@@ -61,9 +61,9 @@ runs:
     - name: Generate SBOM for the image
       shell: bash
       run: |
-        syft scan --output cyclonedx-json=sbom.json --select-catalogers "-cargo-auditable-binary-cataloger" --scope all-layers --source-name "${{ matrix.product }}" --source-version "$TAG_NAME" "$IMAGE_NAME@$DIGEST";
+        syft scan --output cyclonedx-json=sbom.json --select-catalogers "-cargo-auditable-binary-cataloger" --scope all-layers --source-name "${{ inputs.product }}" --source-version "$TAG_NAME" "$IMAGE_NAME@$DIGEST";
         # Determine the PURL for the image
-        PURL="pkg:docker/stackable/${{ matrix.product }}@$DIGEST?repository_url=docker.stackable.tech";
+        PURL="pkg:docker/stackable/${{ inputs.product }}@$DIGEST?repository_url=docker.stackable.tech";
         # Get metadata from the image
         IMAGE_METADATA_DESCRIPTION=$(docker inspect --format='{{.Config.Labels.description}}' "$IMAGE_NAME@$DIGEST");
         IMAGE_METADATA_NAME=$(docker inspect --format='{{.Config.Labels.name}}' "$IMAGE_NAME@$DIGEST");
@@ -75,7 +75,7 @@ runs:
     - name: Push image to oci.stackable.tech and sign via cosign
       shell: bash
       run: |
-        IMAGE_NAME=oci.stackable.tech/sdp/${{ matrix.product }}
+        IMAGE_NAME=oci.stackable.tech/sdp/${{ inputs.product }}
         echo "image: $IMAGE_NAME"
         docker tag "$(< bake-target-tags)" "$IMAGE_NAME:$TAG_NAME"
         # Store the output of `docker image push` into a variable, so we can parse it for the digest
@@ -91,9 +91,9 @@ runs:
     - name: Generate SBOM for the image
       shell: bash
       run: |
-        syft scan --output cyclonedx-json=sbom.json --select-catalogers "-cargo-auditable-binary-cataloger" --scope all-layers --source-name "${{ matrix.product }}" --source-version "$TAG_NAME" "$IMAGE_NAME@$DIGEST";
+        syft scan --output cyclonedx-json=sbom.json --select-catalogers "-cargo-auditable-binary-cataloger" --scope all-layers --source-name "${{ inputs.product }}" --source-version "$TAG_NAME" "$IMAGE_NAME@$DIGEST";
         # Determine the PURL for the image
-        PURL="pkg:docker/sdp/${{ matrix.product }}@$DIGEST?repository_url=oci.stackable.tech";
+        PURL="pkg:docker/sdp/${{ inputs.product }}@$DIGEST?repository_url=oci.stackable.tech";
         # Get metadata from the image
         IMAGE_METADATA_DESCRIPTION=$(docker inspect --format='{{.Config.Labels.description}}' "$IMAGE_NAME@$DIGEST");
         IMAGE_METADATA_NAME=$(docker inspect --format='{{.Config.Labels.name}}' "$IMAGE_NAME@$DIGEST");
