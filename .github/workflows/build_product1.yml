@@ -5,13 +5,14 @@ on:
     branches:
       - main
     paths:
-      - '!.github/workflows/sidequest.yml'
       - product1/**
-      - .github/**
+      - .github/actions/**
+      - .github/workflows/product1.yml
   pull_request:
     paths:
       - product1/**
-      - .github/**
+      - .github/actions/**
+      - .github/workflows/product1.yml
 
 jobs:
   build:
