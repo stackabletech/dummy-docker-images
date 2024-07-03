@@ -13,8 +13,8 @@ jobs:
     - uses: actions/checkout@v4
     - uses: actions/setup-python@v5
     - run: |
-        python --versions
-        python3 --versions
+        python --version
+        python3 --version
     - id: a
       shell: python
       run: |
