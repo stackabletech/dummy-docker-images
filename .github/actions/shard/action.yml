@@ -46,4 +46,5 @@ runs:
         print(f"Writing to $GITHUB_OUTPUT: {output_shards}")
         f.write(output_shards)
         f.close()
-    - run: echo ${{ steps.generate_shards.outputs.SHARDS }} ${{ steps.generate_shards.outputs.COUNT }}
+    - shelll: bash
+      run: echo ${{ steps.generate_shards.outputs.SHARDS }} ${{ steps.generate_shards.outputs.COUNT }}
