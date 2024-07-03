@@ -21,12 +21,12 @@ jobs:
         import sys
         import os
         sys.path.append(str(os.getcwd()))
-
         import conf
+
         # get the product config
         product = list(filter(lambda x: x["name"] == "product2", conf.products))[0]
         # enumerate the versions and only keep the index, eg: [0, 1, 2]
-        versions = [k for k,v in list(enumerate(product["versions"]))]
+        versions = [k for k,v in enumerate(product["versions"])]
         output = f"SHARDS={versions}"
         print(f"Writing to $GITHUB_OUTPUT: {output}")
 
@@ -34,8 +34,6 @@ jobs:
         f = open(github_outputs_file, "w")
         f.write(output)
         f.close()
-
-        # todo: append SHARDS={"shards": [0, 1, 2, 3]} to $GITHUB_OUTPUTS
     outputs:
       shards: ${{ steps.a.outputs.SHARDS }}
 
