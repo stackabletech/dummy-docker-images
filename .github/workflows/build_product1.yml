@@ -7,6 +7,8 @@ on:
     paths:
       - product1/**
       - .github/**
+    paths-ignore:
+    - .github/workflows/sidequest.yml
   pull_request:
     paths:
       - product1/**
