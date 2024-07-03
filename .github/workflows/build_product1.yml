@@ -15,11 +15,24 @@ on:
       - .github/workflows/product1.yml
 
 jobs:
+  generate_matrix:
+    name: generate_matrix
+    runs-on: ubuntu-latest
+    steps:
+    - id: shard
+      uses: ./.github/actions/shard
+    outputs:
+      shards: ${{ steps.shard.outputs.shards }}
+
   build:
     name: hello
+    needs: [generate_matrix]
     permissions:
       id-token: write
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        shards: ${{ fromJson(needs.generate_matrix.outputs.shards) }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -27,6 +40,7 @@ jobs:
         uses: ./.github/actions/build
         with:
           product: product1 # todo: how to handle workflow_dispatch (use product input)
+      - run: echo ${{ matrix.shards }}
       - name: Publish Product Image
         uses: ./.github/actions/publish
         with:
