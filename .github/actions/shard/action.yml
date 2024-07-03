@@ -1,7 +1,9 @@
 name: Generate Shards
 description: This action builds list of shard indices for use in Github Actions Matrices
 outputs:
-  shards: ${{ steps.generate_shards.outputs.SHARDS }}
+  shards:
+    description: A list of shard indices
+    value: ${{ steps.generate_shards.outputs.SHARDS }}
 runs:
   using: composite
   steps:
