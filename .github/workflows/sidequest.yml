@@ -19,6 +19,10 @@ jobs:
       shell: python
       run: |
         # Need to get the number of versions for the product
+        import sys
+        import os
+        sys.path.append(str(os.getcwd()))
+
         import conf
         print(conf)
 
