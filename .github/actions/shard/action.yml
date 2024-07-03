@@ -47,4 +47,4 @@ runs:
         f.write(output_shards)
         f.close()
     - shell: bash
-      run: echo ${{ steps.generate_shards.outputs.SHARDS }} ${{ steps.generate_shards.outputs.COUNT }}
+      run: echo "${{ steps.generate_shards.outputs.SHARDS }}" "${{ steps.generate_shards.outputs.COUNT }}"
