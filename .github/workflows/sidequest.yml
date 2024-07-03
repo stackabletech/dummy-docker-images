@@ -1,0 +1,33 @@
+name: Sidequest
+
+on:
+  push:
+    paths:
+    - .github/workflows/sidequest.yml
+
+jobs:
+  gather_info:
+    name: gather_info
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+    - id: a
+      shell: python
+      run: |
+        # Need to get the number of versions for the product
+        import conf
+        print(conf)
+
+        # todo: append SHARDS={"shards": [0, 1, 2, 3]} to $GITHUB_OUTPUTS
+    outputs:
+      shards: ${{ steps.a.outputs.SHARDS }}
+
+  # run_matrix:
+  #   needs: [gather_info]
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       shards: ${{ needs.gather_info.outputs.shards }}
+  #   steps:
+
