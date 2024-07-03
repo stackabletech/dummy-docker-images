@@ -5,10 +5,9 @@ on:
     branches:
       - main
     paths:
+      - '!.github/workflows/sidequest.yml'
       - product1/**
       - .github/**
-    paths-ignore:
-    - .github/workflows/sidequest.yml
   pull_request:
     paths:
       - product1/**
