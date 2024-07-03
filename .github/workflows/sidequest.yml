@@ -12,9 +12,8 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-python@v5
-    - run: |
-        python --version
-        python3 --version
+      with:
+        python-version: '3.12' 
     - id: a
       shell: python
       run: |
@@ -24,7 +23,11 @@ jobs:
         sys.path.append(str(os.getcwd()))
 
         import conf
-        print(conf)
+        # get the product config
+        product = list(filter(lambda x: x["name"] == "product2", conf.products))[0]
+        # enumerate the versions and only keep the index, eg: [0, 1, 2]
+        versions = [k for k,v in list(enumerate(product["versions"]))]
+        print(f"SHARDS={versions}")
 
         # todo: append SHARDS={"shards": [0, 1, 2, 3]} to $GITHUB_OUTPUTS
     outputs:
