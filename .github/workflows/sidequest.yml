@@ -50,6 +50,6 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        shard: ${{ needs.gather_info.outputs.shards }}
+        shard: ${{ fromJson(needs.gather_info.outputs.shards) }}
     steps:
       - run: doing shard ${{ matrix.shard }}
