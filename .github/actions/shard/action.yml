@@ -36,8 +36,8 @@ runs:
         # enumerate the versions and only keep the index, eg: [0, 1, 2]
         versions = [k for k,v in enumerate(product_conf["versions"])]
         output_count = len(versions)
-        output_count = f"COUNT={output_count}"
-        output_shards = f"SHARDS={versions}"
+        output_count = f"COUNT={output_count}\n"
+        output_shards = f"SHARDS={versions}\n"
 
         github_outputs_file = os.environ['GITHUB_OUTPUT']
         f = open(github_outputs_file, "w")
