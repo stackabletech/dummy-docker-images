@@ -27,7 +27,7 @@ jobs:
         product = list(filter(lambda x: x["name"] == "product2", conf.products))[0]
         # enumerate the versions and only keep the index, eg: [0, 1, 2]
         versions = [k for k,v in list(enumerate(product["versions"]))]
-        output = f"SHARDS={versions}"
+        output = f"SHARDS={"shards": {versions}}"
         print(f"Writing to $GITHUB_OUTPUT: {output}")
 
         github_outputs_file = os.environ['GITHUB_OUTPUT']
