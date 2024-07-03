@@ -19,6 +19,7 @@ jobs:
     name: generate_matrix
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v4
     - id: shard
       uses: ./.github/actions/shard
     outputs:
