@@ -30,7 +30,7 @@ jobs:
         output = f"SHARDS={versions}"
         print(f"Writing to $GITHUB_OUTPUT: {output}")
 
-        github_outputs_file = os.environ['GITHUB_OUTPUTS']
+        github_outputs_file = os.environ['GITHUB_OUTPUT']
         f = open(github_outputs_file, "w")
         f.write(output)
         f.close()
