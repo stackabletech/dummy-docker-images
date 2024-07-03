@@ -45,11 +45,11 @@ jobs:
     steps:
       - run: echo ${{ needs.gather_info.outputs.shards }}
 
-  # run_matrix:
-  #   needs: [gather_info]
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       shards: ${{ needs.gather_info.outputs.shards }}
-  #   steps:
-
+  run_matrix:
+    needs: [gather_info]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        shard: ${{ needs.gather_info.outputs.shards }}
+    steps:
+      - run: doing shard ${{ matrix.shard }}
