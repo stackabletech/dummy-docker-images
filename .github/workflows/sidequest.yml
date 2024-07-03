@@ -27,11 +27,23 @@ jobs:
         product = list(filter(lambda x: x["name"] == "product2", conf.products))[0]
         # enumerate the versions and only keep the index, eg: [0, 1, 2]
         versions = [k for k,v in list(enumerate(product["versions"]))]
-        print(f"SHARDS={versions}")
+        output = f"SHARDS={versions}"
+        print(f"Writing to $GITHUB_OUTPUT: {output}")
+
+        github_outputs_file = os.environ['GITHUB_OUTPUTS']
+        f = open(github_outputs_file, "w")
+        f.write(output)
+        f.close()
 
         # todo: append SHARDS={"shards": [0, 1, 2, 3]} to $GITHUB_OUTPUTS
     outputs:
       shards: ${{ steps.a.outputs.SHARDS }}
+
+  verify_output:
+    needs: [gather_info]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{ needs.gather_info.outputs.shards }}
 
   # run_matrix:
   #   needs: [gather_info]

@@ -18,8 +18,6 @@ products = [
     },
 ]
 
-print(products)
-
 # open_shift_projects = {
 #     "airflow": {"id": "62613f498ccb9938ba3cfde6"},
 #     "druid": {"id": "626140028ccb9938ba3cfde7"},
