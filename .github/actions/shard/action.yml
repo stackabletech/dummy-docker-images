@@ -1,6 +1,13 @@
 name: Generate Shards
 description: This action builds list of shard indices for use in Github Actions Matrices
+inputs:
+  product:
+    description: The name of the product to build via bake (directory name)
+    required: true
 outputs:
+  count:
+    description: The length of the shard list
+    value: ${{ steps.generate_shards.outputs.COUNT }}
   shards:
     description: A list of shard indices
     value: ${{ steps.generate_shards.outputs.SHARDS }}
@@ -12,6 +19,8 @@ runs:
         python-version: '3.12' 
     - id: generate_shards
       shell: python
+      env:
+        PRODUCT_NAME: ${{ inputs.product }}
       run: |
         # Need to get the number of versions for the product
         import sys
@@ -19,14 +28,21 @@ runs:
         sys.path.append(str(os.getcwd()))
         import conf
 
+        product=os.environ['PRODUCT_NAME']
+        print(f"Generating version shards for {product}")
+
         # get the product config
-        product = list(filter(lambda x: x["name"] == "product2", conf.products))[0]
+        product_conf = list(filter(lambda x: x["name"] == product, conf.products))[0]
         # enumerate the versions and only keep the index, eg: [0, 1, 2]
-        versions = [k for k,v in enumerate(product["versions"])]
-        output = f"SHARDS={versions}"
-        print(f"Writing to $GITHUB_OUTPUT: {output}")
+        versions = [k for k,v in enumerate(product_conf["versions"])]
+        output_count = len(versions)
+        output_count = f"COUNT={output_count}"
+        output_shards = f"SHARDS={versions}"
 
         github_outputs_file = os.environ['GITHUB_OUTPUT']
         f = open(github_outputs_file, "w")
-        f.write(output)
+        print(f"Writing to $GITHUB_OUTPUT: {output_count}")
+        f.write(output_count)
+        print(f"Writing to $GITHUB_OUTPUT: {output_shards}")
+        f.write(output_shards)
         f.close()
