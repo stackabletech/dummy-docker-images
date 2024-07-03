@@ -1,0 +1,12 @@
+name: Sidequest2
+
+on:
+  push:
+
+jobs:
+  gather_info:
+    name: let it cook
+    runs-on: ubuntu-latest
+    steps:
+    - run: echo yay
+ 
