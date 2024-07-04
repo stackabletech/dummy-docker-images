@@ -34,7 +34,7 @@
         versions: ${{ steps.shard.outputs.versions }}
   
     build:
-      name: Build and Publish Docker Image (Dev) ${{ matrix.runner.arch }}
+      name: Build/Publish ${{ matrix.versions }}-${{ matrix.runner.arch }} Image
       needs: [generate_matrix]
       permissions:
         id-token: write
