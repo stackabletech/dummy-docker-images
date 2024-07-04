@@ -49,6 +49,7 @@
         - name: Checkout Repository
           uses: actions/checkout@v4
         - name: Build Product Image
+          id: build
           uses: ./.github/actions/build
           with:
             product: ${{ env.PRODUCT_NAME }} # todo: how to handle workflow_dispatch (use product input)
@@ -58,6 +59,8 @@
           uses: ./.github/actions/publish-image
           with:
             product: ${{ env.PRODUCT_NAME }}
+            image-name: ${{ steps.build.outputs.image-name }}
+            image-version: ${{ steps.build.outputs.image-version }}
             nexus-password: ${{ secrets.NEXUS_PASSWORD }}
             harbor-secret: ${{ secrets.HARBOR_ROBOT_SDP_GITHUB_ACTION_BUILD_SECRET }}
 
@@ -69,10 +72,6 @@
       runs-on: ubuntu-latest
       strategy:
         matrix:
-          # runner: ["ubuntu-latest", "ubicloud-standard-8-arm"]
-          # shard-count:
-          #   - ${{ needs.generate_matrix.outputs.count }}
-          # shard-index: ${{ fromJson(needs.generate_matrix.outputs.shards) }}
           versions: ${{ fromJson(needs.generate_matrix.outputs.versions) }}
       steps:
         - name: Checkout Repository
@@ -81,6 +80,6 @@
           uses: ./.github/actions/publish-manifest
           with:
             product: ${{ env.PRODUCT_NAME }} # todo: how to handle workflow_dispatch (use product input)
-            versions: ${{ matrix.versions }}
+            image-version: ${{ matrix.versions }}-stackable0.0.0-dev
             nexus-password: ${{ secrets.NEXUS_PASSWORD }}
             harbor-secret: ${{ secrets.HARBOR_ROBOT_SDP_GITHUB_ACTION_BUILD_SECRET }}
