@@ -1,0 +1,86 @@
+---
+  name: Build Product2
+  
+  env:
+    PRODUCT_NAME: product2
+  
+  on:
+    workflow_dispatch:
+    push:
+      branches:
+        - main
+      paths:
+        - product2/**
+        - .github/actions/**
+        - .github/workflows/dev_product2.yaml
+    pull_request:
+      paths:
+        - product2/**
+        - .github/**
+  
+  jobs:
+    generate_matrix:
+      name: generate_matrix
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+        - id: shard
+          uses: ./.github/actions/shard
+          with:
+            product: ${{ env.PRODUCT_NAME }}
+      outputs:
+        count: ${{ steps.shard.outputs.count }}
+        shards: ${{ steps.shard.outputs.shards }}
+        versions: ${{ steps.shard.outputs.versions }}
+  
+    build:
+      name: Build and Publish Docker Image (Dev)
+      needs: [generate_matrix]
+      permissions:
+        id-token: write
+      runs-on: ${{ matrix.runner }}
+      strategy:
+        matrix:
+          runner: ["ubuntu-latest", "ubicloud-standard-8-arm"]
+          shard-count:
+            - ${{ needs.generate_matrix.outputs.count }}
+          shard-index: ${{ fromJson(needs.generate_matrix.outputs.shards) }}
+      steps:
+        - name: Checkout Repository
+          uses: actions/checkout@v4
+        - name: Build Product Image
+          uses: ./.github/actions/build
+          with:
+            product: ${{ env.PRODUCT_NAME }} # todo: how to handle workflow_dispatch (use product input)
+            shard-count: ${{ matrix.shard-count }}
+            shard-index: ${{ matrix.shard-index }}
+        - name: Publish Product Image
+          uses: ./.github/actions/publish-image
+          with:
+            product: ${{ env.PRODUCT_NAME }}
+            nexus-password: ${{ secrets.NEXUS_PASSWORD }}
+            harbor-secret: ${{ secrets.HARBOR_ROBOT_SDP_GITHUB_ACTION_BUILD_SECRET }}
+
+    publish_manifests:
+      name: Build and Publish Docker Manifests (Dev)
+      needs: [generate_matrix, build]
+      permissions:
+        id-token: write
+      runs-on: ubuntu-latest
+      strategy:
+        matrix:
+          # runner: ["ubuntu-latest", "ubicloud-standard-8-arm"]
+          # shard-count:
+          #   - ${{ needs.generate_matrix.outputs.count }}
+          # shard-index: ${{ fromJson(needs.generate_matrix.outputs.shards) }}
+          versions: ${{ fromJson(needs.generate_matrix.outputs.versions) }}
+      steps:
+        - name: Checkout Repository
+          uses: actions/checkout@v4
+        - name: Build Product Manifest List
+          uses: ./.github/actions/publish-manifest
+          with:
+            product: ${{ env.PRODUCT_NAME }} # todo: how to handle workflow_dispatch (use product input)
+            versions: ${{ matrix.versions }}
+            nexus-password: ${{ secrets.NEXUS_PASSWORD }}
+            harbor-secret: ${{ secrets.HARBOR_ROBOT_SDP_GITHUB_ACTION_BUILD_SECRET }}
