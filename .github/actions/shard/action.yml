@@ -39,7 +39,7 @@ runs:
         product_conf = list(filter(lambda x: x["name"] == product, conf.products))[0]
         # enumerate the versions and only keep the index, eg: [0, 1, 2]
         version_indices = [k for k,v in enumerate(product_conf["versions"])]
-        versions = [v for k,v in enumerate(product_conf["versions"])]
+        versions = [v["product"] for k,v in enumerate(product_conf["versions"])]
         output_count = len(version_indices)
         output_count = f"COUNT={output_count}\n"
         output_shards = f"SHARDS={version_indices}\n"
