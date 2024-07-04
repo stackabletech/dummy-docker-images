@@ -1,8 +1,8 @@
 ---
-  name: Build Product1
+  name: Build Product2
   
   env:
-    PRODUCT_NAME: product1
+    PRODUCT_NAME: product2
   
   on:
     workflow_dispatch:
@@ -10,12 +10,12 @@
       branches:
         - main
       paths:
-        - product1/**
+        - product2/**
         - .github/actions/**
-        - .github/workflows/dev_product1.yaml
+        - .github/workflows/dev_product2.yaml
     pull_request:
       paths:
-        - product1/**
+        - product2/**
         - .github/**
   
   jobs:
