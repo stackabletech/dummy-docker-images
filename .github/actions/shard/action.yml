@@ -19,7 +19,7 @@ runs:
       id: generate_shards
       shell: python
       env:
-        PRODUCT_NAME: ${{ inputs.product }}
+        PRODUCT_NAME: ${{ inputs.product-name }}
       run: |
         # Need to get the list of versions for the product
         import sys
@@ -28,6 +28,7 @@ runs:
         import conf
 
         product=os.environ['PRODUCT_NAME']
+        assert(product)
         print(f"Generating version list for {product}")
 
         # get the product config
