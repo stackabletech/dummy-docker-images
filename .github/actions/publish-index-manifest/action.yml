@@ -60,7 +60,7 @@ runs:
           jq \
           --null-input \
           --arg image_index_uri "$IMAGE_INDEX_URI" \
-          --arg input "$IMAGE_ARCHITECTURES" \
+          --arg arch "$IMAGE_ARCHITECTURES" \
           '
             $input
             | fromjson
