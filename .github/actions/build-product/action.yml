@@ -96,7 +96,7 @@ runs:
         OLD_IMAGE_URI="$(< bake-target-tags)"
 
         # Replace the image uri in the bake file
-        sed -i -e 's/docker\.stackable\.tech\/stackable/localhost/') bake-target-tags
+        sed -i -e 's/docker\.stackable\.tech\/stackable/localhost/' bake-target-tags
 
         # Finally, re-tag image
         docker tag "$OLD_IMAGE_URI" "$(< bake-target-tags)"
