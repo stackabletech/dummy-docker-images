@@ -35,6 +35,7 @@ runs:
         product_conf = list(filter(lambda x: x["name"] == product, conf.products))[0]
         # list the versions, eg: [1.0, 1.1, 2.0]
         versions = [v["product"] for k,v in enumerate(product_conf["versions"])]
+        assert(version)
         output_versions = f"VERSIONS={versions}\n"
 
         github_outputs_file = os.environ['GITHUB_OUTPUT']
