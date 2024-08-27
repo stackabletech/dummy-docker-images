@@ -63,6 +63,7 @@ jobs:
           image-registry-password: ${{ secrets.NEXUS_PASSWORD }}
           image-repository: stackable/${{ env.PRODUCT_NAME }}
           image-manifest-tag: ${{ steps.build.outputs.image-manifest-tag }}
+          source-image-uri: localhost/${{ env.PRODUCT_NAME }}:${{ steps.build.outputs.image-manifest-tag }}
 
       - name: Publish Container Image on oci.stackable.tech
         uses: ./.github/actions/publish-image
@@ -72,6 +73,7 @@ jobs:
           image-registry-password: ${{ secrets.HARBOR_ROBOT_SDP_GITHUB_ACTION_BUILD_SECRET }}
           image-repository: sdp/${{ env.PRODUCT_NAME }}
           image-manifest-tag: ${{ steps.build.outputs.image-manifest-tag }}
+          source-image-uri: localhost/${{ env.PRODUCT_NAME }}:${{ steps.build.outputs.image-manifest-tag }}
 
   publish_manifests:
     name: Build/Publish ${{ matrix.versions }} Index Manifest

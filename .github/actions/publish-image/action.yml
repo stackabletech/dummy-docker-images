@@ -21,6 +21,27 @@ inputs:
       Human-readable tag (usually the version) with architecture information,
       for example: `3.4.1-stackable0.0.0-dev-amd64`
     required: true
+  # NOTE (@Techassi): This ideally shouldn't be needed because we should be able
+  # to construct the source image uri from the other inputs as well, but there
+  # is some weird stuff happening with bake and how docker tags work. Part of
+  # the issue is that the hostname where the image is pushed to, is part of the
+  # tag itself. This shouldn't be the case and OCI should fix it in their spec
+  # as well.
+  #
+  # Another part of the issue is the difference in the namespace/repository
+  # path.
+  # On Nexus, we use:
+  # - stackable/kafka 
+  # - k8s/sig-storage/csi-provisioner
+  #
+  # On Harbor we use:
+  # - sdp/kafka
+  # - sdp/sig-storage/csi-provisioner
+  source-image-uri:
+    description: |
+      The source image uri, which gets re-tagged by this action to be pushed to
+      the appropriate registry.
+    required: true
 runs:
   using: composite
   steps:
@@ -40,14 +61,14 @@ runs:
     - name: Re-tag container image
       shell: bash
       env:
-        REMOTE_IMAGE_URI: ${{ inputs.image-registry-uri }}/${{ inputs.image-repository }}:${{ inputs.image-manifest-tag }}
-        LOCAL_IMAGE_URI: localhost/${{ inputs.image-repository }}:${{ inputs.image-manifest-tag }}
+        TARGET_IMAGE_URI: ${{ inputs.image-registry-uri }}/${{ inputs.image-repository }}:${{ inputs.image-manifest-tag }}
+        SOURCE_IMAGE_URI: ${{ inputs.source-image-uri }}
       run: |
         set -euo pipefail
-        docker tag "$LOCAL_IMAGE_URI" "$REMOTE_IMAGE_URI"
+        docker tag "$SOURCE_IMAGE_URI" "$TARGET_IMAGE_URI"
 
         # Output for the next step
-        echo "IMAGE_MANIFEST_URI=$REMOTE_IMAGE_URI" >> $GITHUB_ENV
+        echo "IMAGE_MANIFEST_URI=$TARGET_IMAGE_URI" >> $GITHUB_ENV
 
     - name: Push the container image to ${{ inputs.image-registry-uri }}
       shell: bash
