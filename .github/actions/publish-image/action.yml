@@ -92,6 +92,7 @@ runs:
     - name: Generate SBOM for the container image (${{ env.IMAGE_REPO_DIGEST }})
       shell: bash
       env:
+        IMAGE_MANIFEST_TAG: ${{ inputs.image-manifest-tag }}
         IMAGE_REPOSITORY: ${{ inputs.image-repository }}
         REGISTRY_URI: ${{ inputs.image-registry-uri }}
       run: |
@@ -115,7 +116,7 @@ runs:
           --select-catalogers "-cargo-auditable-binary-cataloger" \
           --scope all-layers \
           --source-name "$IMAGE_REPOSITORY" \
-          --source-version "$TAG_NAME" "${IMAGE_REPO_DIGEST}"
+          --source-version "$IMAGE_MANIFEST_TAG" "${IMAGE_REPO_DIGEST}"
 
         # TODO (@Techassi): Replace author with manufacturer, because it is
         # automated, see https://cyclonedx.org/docs/1.6/json/#metadata_component_manufacturer
