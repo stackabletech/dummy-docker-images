@@ -58,11 +58,12 @@ runs:
 
         AMEND_OPTIONS=$(
           jq \
+          --raw-output \
           --null-input \
           --arg image_index_uri "$IMAGE_INDEX_URI" \
-          --arg arch "$IMAGE_ARCHITECTURES" \
+          --arg arch_list "$IMAGE_ARCHITECTURES" \
           '
-            $input
+            $arch_list
             | fromjson
             | [
                 .[] as $arch | "--amend \($image_index_uri)-\($arch)"
