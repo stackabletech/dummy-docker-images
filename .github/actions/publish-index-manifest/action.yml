@@ -45,6 +45,7 @@ runs:
       shell: bash
       env:
         IMAGE_INDEX_MANIFEST_TAG: ${{ inputs.image-index-manifest-tag }}
+        IMAGE_ARCHITECTURES: ${{ inputs.image-architectures }}
         IMAGE_REPOSITORY: ${{ inputs.image-repository }}
         REGISTRY_URI: ${{ inputs.image-registry-uri }}
       run: |
@@ -59,7 +60,7 @@ runs:
           jq \
           --null-input \
           --arg image_index_uri "$IMAGE_INDEX_URI" \
-          --arg input "$INPUT" \
+          --arg input "$IMAGE_ARCHITECTURES" \
           '
             $input
             | fromjson
