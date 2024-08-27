@@ -22,6 +22,12 @@ inputs:
     description: |
       Human-readable tag (usually the version) without architecture information,
       for example: `3.4.1-stackable0.0.0-dev`
+  image-architectures:
+    description: |
+      A JSON array of architectures to add to the image index manifest, like
+      ["amd64", "arm64", "riscv"]
+    default: |
+      ["amd64", "arm64"]
 runs:
   using: composite
   steps:
@@ -49,18 +55,34 @@ runs:
         IMAGE_INDEX_URI="$REGISTRY_URI/$IMAGE_REPOSITORY:$IMAGE_INDEX_MANIFEST_TAG"
         echo "IMAGE_INDEX_URI=$IMAGE_INDEX_URI" >> $GITHUB_ENV
 
+        AMEND_OPTIONS=$(
+          jq \
+          --null-input \
+          --arg image_index_uri "$IMAGE_INDEX_URI" \
+          --arg input "$INPUT" \
+          '
+            $input
+            | fromjson
+            | [
+                .[] as $arch | "--amend \($image_index_uri)-\($arch)"
+              ] 
+            | join(" ")'
+        )
+
         # `docker manifest push` directly returns the digest of the manifest list
         # As it is an experimental feature, this might change in the future.
         # We use --amend because the manifest list would be updated since we use
         # the same tag: 0.0.0-dev
         #
         # Further reading: https://docs.docker.com/reference/cli/docker/manifest/push/
-        docker manifest create "$IMAGE_INDEX_URI" --amend "${IMAGE_INDEX_URI}-amd64" --amend "${IMAGE_INDEX_URI}-arm64"
+        docker manifest create "$IMAGE_INDEX_URI" ${AMEND_OPTIONS[@]}
         docker manifest push "$IMAGE_INDEX_URI"
 
     - name: Sign Image Index Manifest
       shell: bash
       run: |
+        set -euo pipefail
+
         # Get the image index manifest digest
         DIGEST=$(< .scripts/get_manifest_digest.sh "$IMAGE_INDEX_URI")
 
