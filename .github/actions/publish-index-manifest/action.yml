@@ -82,6 +82,9 @@ runs:
 
     - name: Sign Image Index Manifest
       shell: bash
+      env:
+        IMAGE_REPOSITORY: ${{ inputs.image-repository }}
+        REGISTRY_URI: ${{ inputs.image-registry-uri }}
       run: |
         set -euo pipefail
 
