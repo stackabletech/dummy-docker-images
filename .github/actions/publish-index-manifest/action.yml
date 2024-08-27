@@ -49,7 +49,7 @@ runs:
         IMAGE_REPOSITORY: ${{ inputs.image-repository }}
         REGISTRY_URI: ${{ inputs.image-registry-uri }}
       run: |
-        set -xeuo pipefail
+        set -euo pipefail
 
         # Construct the image index uri, which for example contains:
         # docker.stackable.tech/stackable/kafka:3.4.1-stackable0.0.0-dev
