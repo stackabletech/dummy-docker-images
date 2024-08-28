@@ -38,11 +38,11 @@ jobs:
         env:
           IMAGE_INDEX_MANIFEST_TAG: ${{ inputs.image-index-manifest-tag }}
           IMAGE_REPOSITORY_URI: ${{ inputs.image-repository-uri }}
-        run: >-
-          docker pull
-          --quiet
-          --platform ${{ matrix.arch }}
-          "$IMAGE_REPOSITORY_URI:$IMAGE_INDEX_MANIFEST_TAG"
+        run: |
+          docker pull \
+            --quiet \
+            --platform ${{ matrix.arch }} \
+            "$IMAGE_REPOSITORY_URI:$IMAGE_INDEX_MANIFEST_TAG"
       - name: Strip registry
         env:
           IMAGE_REPOSITORY_URI: ${{ inputs.image-repository-uri }}
