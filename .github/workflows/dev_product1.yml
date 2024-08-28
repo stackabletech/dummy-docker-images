@@ -49,7 +49,7 @@ jobs:
 
       - name: Build Product Container Image
         id: build
-        uses: ./.github/actions/build-product
+        uses: ./.github/actions/build-product-image
         with:
           product-name: ${{ env.PRODUCT_NAME }}
           product-version: ${{ matrix.versions }}
