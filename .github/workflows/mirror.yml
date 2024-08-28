@@ -37,6 +37,7 @@ jobs:
           IMAGE_INDEX_MANIFEST_TAG: ${{ inputs.image-index-manifest-tag }}
           IMAGE_REPOSITORY_URI: ${{ inputs.image-repository-uri }}
         run: |
+          set -x
           docker pull --quiet --platform ${{ matrix.arch }} \
           "$IMAGE_REPOSITORY_URI:$IMAGE_INDEX_MANIFEST_TAG"
       - name: Strip registry
