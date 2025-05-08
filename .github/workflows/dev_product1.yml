@@ -93,7 +93,7 @@ jobs:
     if: failure()
     steps:
       - name: Send Notification
-        uses: stackabletech/actions/send-slack-notification@d815d7b35625422627fd4b69e22efbaf7c8045c5
+        uses: stackabletech/actions/send-slack-notification@feat/send-slack-notification
         with:
           build-result: ${{ needs.build.result }}
           publish-manifests-result: ${{ needs.publish_manifests.result }}
