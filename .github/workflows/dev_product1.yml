@@ -99,7 +99,7 @@ jobs:
     if: failure() || github.run_attempt > 1
     steps:
       - name: Send Notification
-        uses: stackabletech/actions/send-slack-notification@feat/send-slack-notification
+        uses: stackabletech/actions/send-slack-notification@feat/failure-success-notifications
         with:
           build-result: ${{ needs.build.result }}
           publish-manifests-result: ${{ needs.publish_manifests.result }}
