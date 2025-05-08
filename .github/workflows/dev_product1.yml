@@ -97,4 +97,4 @@ jobs:
         with:
           build-result: ${{ needs.build.result }}
           publish-manifests-result: ${{ needs.publish_manifests.result }}
-          slack-token: ${{ secrets.slack-token }}
+          slack-token: ${{ secrets.SLACK_CONTAINER_IMAGE_TOKEN }}
