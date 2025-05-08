@@ -44,6 +44,12 @@ jobs:
           - {name: "ubicloud-standard-8-arm", arch: "arm64"}
         versions: ${{ fromJson(needs.generate_matrix.outputs.versions) }}
     steps:
+      - name: Fail on purpose
+        if: github.run_attempt <= 2
+        shell: bash
+        run: |
+          exit 1
+
       - name: Checkout Repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
@@ -90,7 +96,7 @@ jobs:
     name: Failure Notification
     needs: [generate_matrix, build, publish_manifests]
     runs-on: ubuntu-latest
-    if: failure()
+    if: failure() || github.run_attempt > 1
     steps:
       - name: Send Notification
         uses: stackabletech/actions/send-slack-notification@feat/send-slack-notification
