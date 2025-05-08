@@ -23,9 +23,9 @@ jobs:
     name: Generate Version List
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - id: shard
-        uses: stackabletech/actions/shard@d501d64f40deef50a39f2d282f308e613c2415c8
+        uses: stackabletech/actions/shard@4bfd3b65f22af597fe784599c077dc34bf5894a7 # v0.8.0
         with:
           product-name: ${{ env.PRODUCT_NAME }}
     outputs:
@@ -45,28 +45,17 @@ jobs:
         versions: ${{ fromJson(needs.generate_matrix.outputs.versions) }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Build Product Container Image
         id: build
-        uses: stackabletech/actions/build-product-image@d501d64f40deef50a39f2d282f308e613c2415c8
+        uses: stackabletech/actions/build-product-image@4bfd3b65f22af597fe784599c077dc34bf5894a7 # v0.8.0
         with:
           product-name: ${{ env.PRODUCT_NAME }}
           product-version: ${{ matrix.versions }}
-          build-cache-password: ${{ secrets.BUILD_CACHE_NEXUS_PASSWORD }}
-
-      - name: Publish Container Image on docker.stackable.tech
-        uses: stackabletech/actions/publish-image@d501d64f40deef50a39f2d282f308e613c2415c8
-        with:
-          image-registry-uri: docker.stackable.tech
-          image-registry-username: github
-          image-registry-password: ${{ secrets.NEXUS_PASSWORD }}
-          image-repository: stackable/${{ env.PRODUCT_NAME }}
-          image-manifest-tag: ${{ steps.build.outputs.image-manifest-tag }}
-          source-image-uri: localhost/${{ env.PRODUCT_NAME }}:${{ steps.build.outputs.image-manifest-tag }}
 
       - name: Publish Container Image on oci.stackable.tech
-        uses: stackabletech/actions/publish-image@d501d64f40deef50a39f2d282f308e613c2415c8
+        uses: stackabletech/actions/publish-image@4bfd3b65f22af597fe784599c077dc34bf5894a7 # v0.8.0
         with:
           image-registry-uri: oci.stackable.tech
           image-registry-username: robot$sdp+github-action-build
@@ -86,22 +75,26 @@ jobs:
         versions: ${{ fromJson(needs.generate_matrix.outputs.versions) }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-
-      - name: Publish and Sign Image Index Manifest to docker.stackable.tech
-        uses: stackabletech/actions/publish-index-manifest@d501d64f40deef50a39f2d282f308e613c2415c8
-        with:
-          image-registry-uri: docker.stackable.tech
-          image-registry-username: github
-          image-registry-password: ${{ secrets.NEXUS_PASSWORD }}
-          image-repository: stackable/${{ env.PRODUCT_NAME }}
-          image-index-manifest-tag: ${{ matrix.versions }}-stackable0.0.0-dev
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Publish and Sign Image Index Manifest to oci.stackable.tech
-        uses: stackabletech/actions/publish-index-manifest@d501d64f40deef50a39f2d282f308e613c2415c8
+        uses: stackabletech/actions/publish-index-manifest@4bfd3b65f22af597fe784599c077dc34bf5894a7 # v0.8.0
         with:
           image-registry-uri: oci.stackable.tech
           image-registry-username: robot$sdp+github-action-build
           image-registry-password: ${{ secrets.HARBOR_ROBOT_SDP_GITHUB_ACTION_BUILD_SECRET }}
           image-repository: sdp/${{ env.PRODUCT_NAME }}
           image-index-manifest-tag: ${{ matrix.versions }}-stackable0.0.0-dev
+
+  notify:
+    name: Failure Notification
+    needs: [generate_matrix, build, publish_manifests]
+    runs-on: ubuntu-latest
+    if: failure()
+    steps:
+      - name: Send Notification
+        uses: stackabletech/actions/send-slack-notification@d815d7b35625422627fd4b69e22efbaf7c8045c5
+        with:
+          build-result: ${{ needs.build.result }}
+          publish-manifests-result: ${{ needs.publish_manifests.result }}
+          slack-token: ${{ secrets.slack-token }}
