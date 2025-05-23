@@ -1,0 +1,28 @@
+---
+name: rustup
+
+on:
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_TOOLCHAIN_VERSION: "nightly-2025-01-15"
+  RUSTUP_VERSION: 1.28.2
+
+permissions: {}
+
+jobs:
+  explicit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Techassi/rust-toolchain@test
+        with:
+          toolchain: ${{ env.RUST_TOOLCHAIN_VERSION }}
+          rustup-version: ${{ env.RUSTUP_VERSION }}
+
+  latest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Techassi/rust-toolchain@test
+        with:
+          toolchain: ${{ env.RUST_TOOLCHAIN_VERSION }}
