@@ -19,6 +19,9 @@ jobs:
         with:
           toolchain: ${{ env.RUST_TOOLCHAIN_VERSION }}
           rustup-version: ${{ env.RUSTUP_VERSION }}
+      - shell: bash
+        run: |
+          rustup --version
 
   latest:
     runs-on: ubuntu-latest
@@ -26,3 +29,6 @@ jobs:
       - uses: Techassi/rust-toolchain@test
         with:
           toolchain: ${{ env.RUST_TOOLCHAIN_VERSION }}
+      - shell: bash
+        run: |
+          rustup --version
