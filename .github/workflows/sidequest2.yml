@@ -19,7 +19,7 @@ jobs:
     #       A: B
     #     volumes:
     #       # TODO: Mount a volume with the collector config
-    #       # TODO: Mount a volume with the kuttl output files
+    #       # TODO: Mount a volume with the kuttl output files. Use a Temp dir so it is available before the checkout happens
     #       #   - .:/mnt
     #       - /home/runner/work/_actions/actions/stackabletech/run-integration-test/
     steps:
@@ -27,7 +27,10 @@ jobs:
           set -x
           set +e
           ls -al /home/runner/work/
-          ls -al /home/runner/work/_actions
+          ls -al /home/runner/work/_temp/
+          ls -al /home/runner/work/dummy-docker-images/
+          ls -al /home/runner/work/dummy-docker-images/docker-images
+          ls -al /home/runner/work/_actions/
           ls -al /home/runner/work/_actions/stackabletech/
           ls -al /home/runner/work/_actions/stackabletech/actions/
           ls -al /home/runner/work/_actions/stackabletech/actions/48f987367d0cb42db1248d050faabcdf26218f1e/
