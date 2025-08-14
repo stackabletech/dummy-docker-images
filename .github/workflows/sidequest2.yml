@@ -1,0 +1,41 @@
+name: Sidequest2
+
+on:
+  push:
+    paths:
+    - .github/workflows/sidequest2.yml
+
+jobs:
+  test:
+    name: Run Integration Test
+    runs-on: ubuntu-latest
+    # services:
+    #   otel-collector:
+    #     image: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-k8s:0.131.1
+    #     options: >-
+    #       --config=/mnt/config
+    #     env:
+    #       # Can we specify a config path here?
+    #       A: B
+    #     volumes:
+    #       # TODO: Mount a volume with the collector config
+    #       # TODO: Mount a volume with the kuttl output files
+    #       #   - .:/mnt
+    #       - /home/runner/work/_actions/actions/run-integration-test/
+    steps:
+      - name: Run Integration Test
+        id: test
+        uses: stackabletech/actions/run-integration-test@48f987367d0cb42db1248d050faabcdf26218f1e # TODO: Use released version
+        with:
+          replicated-api-token: nope
+          test-mode-input: a
+          test-suite: b
+          test-mode: c
+          test: d
+      - run: |
+          set -x
+          ls -al /home/runner/work/
+          ls -al /home/runner/work/_actions
+          ls -al /home/runner/work/_actions/actions/
+          ls -al /home/runner/work/_actions/actions/run-integration-test
+          exit 0
