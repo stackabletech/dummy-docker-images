@@ -21,14 +21,15 @@ jobs:
     #       # TODO: Mount a volume with the collector config
     #       # TODO: Mount a volume with the kuttl output files
     #       #   - .:/mnt
-    #       - /home/runner/work/_actions/actions/run-integration-test/
+    #       - /home/runner/work/_actions/actions/stackabletech/run-integration-test/
     steps:
       - run: |
           set -x
+          set -e
           ls -al /home/runner/work/
           ls -al /home/runner/work/_actions
-          ls -al /home/runner/work/_actions/actions/
-          ls -al /home/runner/work/_actions/actions/run-integration-test
+          ls -al /home/runner/work/_actions/stackabletech/actions/
+          ls -al /home/runner/work/_actions/stackabletech/actions/run-integration-test
           exit 0
       - name: Run Integration Test
         id: test
