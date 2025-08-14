@@ -29,7 +29,7 @@ jobs:
           ls -al /home/runner/work/
           ls -al /home/runner/work/_temp/
           ls -al /home/runner/work/dummy-docker-images/
-          ls -al /home/runner/work/dummy-docker-images/docker-images
+          ls -al /home/runner/work/dummy-docker-images/dummy-docker-images
           ls -al /home/runner/work/_actions/
           ls -al /home/runner/work/_actions/stackabletech/
           ls -al /home/runner/work/_actions/stackabletech/actions/
