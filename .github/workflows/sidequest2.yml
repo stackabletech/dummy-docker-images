@@ -23,6 +23,13 @@ jobs:
     #       #   - .:/mnt
     #       - /home/runner/work/_actions/actions/run-integration-test/
     steps:
+      - run: |
+          set -x
+          ls -al /home/runner/work/
+          ls -al /home/runner/work/_actions
+          ls -al /home/runner/work/_actions/actions/
+          ls -al /home/runner/work/_actions/actions/run-integration-test
+          exit 0
       - name: Run Integration Test
         id: test
         uses: stackabletech/actions/run-integration-test@48f987367d0cb42db1248d050faabcdf26218f1e # TODO: Use released version
@@ -32,10 +39,3 @@ jobs:
           test-suite: b
           test-mode: c
           test: d
-      - run: |
-          set -x
-          ls -al /home/runner/work/
-          ls -al /home/runner/work/_actions
-          ls -al /home/runner/work/_actions/actions/
-          ls -al /home/runner/work/_actions/actions/run-integration-test
-          exit 0
