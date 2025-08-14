@@ -33,6 +33,12 @@ jobs:
           ls -al /home/runner/work/_actions/stackabletech/actions/48f987367d0cb42db1248d050faabcdf26218f1e/
           ls -al /home/runner/work/_actions/stackabletech/actions/48f987367d0cb42db1248d050faabcdf26218f1e/run-integration-test/
           exit 0
+
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        with:
+          persist-credentials: false
+          submodules: recursive
+
       - name: Run Integration Test
         id: test
         uses: stackabletech/actions/run-integration-test@48f987367d0cb42db1248d050faabcdf26218f1e # TODO: Use released version
